@@ -65,6 +65,7 @@ Ball.prototype.update = function(billiard) {
     if ((this.y - this.radius) <= billiard.tableY1) {
         this.velY = -(this.velY);
     }
+    /*
     if (this.velX > 0) {
         this.velX -= this.resistance;
         if (this.velX < 0)
@@ -83,6 +84,14 @@ Ball.prototype.update = function(billiard) {
         if (this.velY > 0)
             this.velY = 0;
     }
+    */
+    var speedBetrag = Math.sqrt(this.velX * this.velX + this.velY * this.velY);
+    speedBetrag -= this.resistance;
+    if (speedBetrag < 0)
+        speedBetrag = 0;
+    var speedAngle = Math.atan2(this.velX, this.velY);
+    this.velX = Math.sin(speedAngle) * speedBetrag;
+    this.velY = Math.cos(speedAngle) * speedBetrag;
     this.x += this.velX/10;
     this.y += this.velY/10;
 };
