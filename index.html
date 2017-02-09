@@ -1,0 +1,93 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Billiard</title>
+
+  </head>
+  <body>
+	
+	<canvas></canvas>
+	
+	<script>
+        var $ = require("./node_modules/jquery/dist/jquery.js");
+        const renderer = require('./renderer.js');
+        const Billiard = renderer.Billiard;
+        const Ball = renderer.Ball;
+        const radius = 10;
+
+        var canvas = document.querySelector('canvas');
+        var ctx = canvas.getContext('2d');
+        
+
+        var height = canvas.height = window.innerHeight;
+        var width = canvas.width = window.innerWidth;
+        width = canvas.width = window.innerWidth + (height/width - 3/5)*width;
+
+        var tableHeight = height * (4 / 6);
+        var tableWidth = width * (6 / 8)
+        var tableX1 = width * (1 / 8);
+        var tableY1 = height * (1 / 6);
+        var tableX2 = tableX1 + tableWidth;
+        var tableY2 = tableY1 + tableHeight;
+        var border = 20;
+
+        var billiard = new Billiard(tableX1, tableY1, tableWidth, tableHeight, radius);
+        billiard.setInitPosition();
+        
+        function loop() { // animation loop
+            ctx.fillStyle = 'rgba(0, 0, 0, 1)';
+            ctx.fillRect(0, 0, width, height);
+
+            ctx.fillStyle = 'rgba(150, 90, 70, 0.90)';
+            ctx.fillRect(tableX1 - border, tableY1 - border, tableWidth + 2*border, tableHeight + 2*border);
+           
+            ctx.fillStyle = 'rgba(0, 130, 0, 0.90)';
+            ctx.fillRect(tableX1, tableY1, tableWidth, tableHeight);
+            
+            for (i = 0; i < billiard.balls.length; i++) {
+                billiard.balls[i].draw(ctx);
+                for (var j = 0; j < 5; j++) {
+                    billiard.balls[i].update(billiard);
+                    billiard.collisionDetect(billiard.balls[i]);
+                }
+                billiard.key.draw(ctx);
+                billiard.balls[i].processed = false;
+            }
+            //for (i = 0; i < balls.length; i++) {
+
+            //}
+
+            requestAnimationFrame(loop);
+        }
+        loop();
+
+        $("canvas").mousemove(function (mouse) {
+            var x = mouse.pageX - $(this).offset().left;
+            var y = mouse.pageY - $(this).offset().top;
+            if (billiard.drawKey == true) {
+                billiard.key.x1 = x;
+                billiard.key.y1 = y
+            }
+        });
+
+        $("canvas").mousedown(function (mouse) { 
+            var x = mouse.pageX - $(this).offset().left;
+            var y = mouse.pageY - $(this).offset().top;
+            //billiard.key.x1 = x;
+            //billiard.key.y1 = y;
+            billiard.checkMouseHit(x, y);
+        });
+        $("canvas").mouseup(function (mouse) {
+            billiard.drawKey = false;
+            billiard.strikeBall();
+            billiard.key.x1 = 0;
+            billiard.key.y1 = 0;
+            billiard.key.x2 = 0;
+            billiard.key.y2 = 0;
+        });
+        //document.addEventListener('resize', onWindowResize(), false);
+
+  </script>
+  </body>
+</html>

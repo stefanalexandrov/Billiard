@@ -1,0 +1,19 @@
+{
+  "name": "electron-quick-start",
+  "version": "1.0.0",
+  "description": "Billiard game",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": "https://github.com/stefanalexandrov/IdealElasticCollisionGame.git",
+  "keywords": [
+    "Billiard"
+  ],
+  "author": "Stefan Alexandrov",
+  "license": "CC0-1.0",
+  "devDependencies": {
+    "electron": "^1.4.1",
+    "jquery": "~3.1.1"
+  }
+}
