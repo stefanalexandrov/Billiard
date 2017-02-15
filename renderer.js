@@ -20,6 +20,7 @@ function Ball(ballRadius, gradient) {
 	this.processed = false;
 	this.striker = false;
 	this.resistance = (0.007 * 9.81) / this.radius;
+	this.inPocket = false;
 };
 function Key() {
     this.length = 50;
@@ -27,7 +28,7 @@ function Key() {
     this.y1 = 0;
     this.x2 = 0;
     this.y2 = 0;
-}
+};
 Key.prototype.draw = function (ctx) {
     ctx.beginPath();
     ctx.moveTo(this.x1, this.y1);
@@ -35,8 +36,10 @@ Key.prototype.draw = function (ctx) {
     ctx.lineWidth = 5;
     ctx.strokeStyle = "rgb(130, 130, 120)";
     ctx.stroke();
-}
+};
 Ball.prototype.draw = function (ctx) {
+    if (this.inPocket)
+        return;
     ctx.beginPath();
     var gradient = ctx.createRadialGradient(this.x - 3, this.y - 3, radius / 4, this.x, this.y, radius);
     if (this.striker) {
@@ -53,6 +56,24 @@ Ball.prototype.draw = function (ctx) {
     ctx.fill();
 };
 Ball.prototype.update = function(billiard) {
+    if (this.inPocket)
+        return;
+    if (this.x < billiard.tableX1 + 1.2*this.radius && this.y < billiard.tableY1 + 1.2*this.radius) {
+        this.inPocket = true;
+        return;
+    }
+    if (this.x < billiard.tableX1 + 1.2 * this.radius && this.y > billiard.tableY2 - 1.2 * this.radius) {
+        this.inPocket = true;
+        return;
+    }
+    if (this.x > billiard.tableX2 - 1.2 * this.radius && this.y > billiard.tableY2 - 1.2 * this.radius) {
+        this.inPocket = true;
+        return;
+    }
+    if (this.x > billiard.tableX2 - 1.2 * this.radius && this.y < billiard.tableY1 + 1.2 * this.radius) {
+        this.inPocket = true;
+        return;
+    }
     if ((this.x + this.radius) >= billiard.tableX2) {
         this.velX = -(this.velX);
     }
@@ -199,7 +220,7 @@ Billiard.prototype.collisionDetect = function (ball) {
         }
     }
 };
-Billiard.prototype.checkMouseHit = function(x, y) {
+Billiard.prototype.checkMouseHit = function (x, y) {
     for (var i = 0; i < this.balls.length; i++) {
         if (this.balls[i].striker == true && Math.abs(this.balls[i].velX) <= 0.5 && Math.abs(this.balls[i].velY) <= 0.5) {
             var dx = x - this.balls[i].x;
@@ -214,19 +235,72 @@ Billiard.prototype.checkMouseHit = function(x, y) {
             }
         }
     }
-}
-Billiard.prototype.strikeBall = function() {
+};
+Billiard.prototype.strikeBall = function () {
     for (var i = 0; i < this.balls.length; i++) {
         if (this.balls[i].striker == true) {
             var dx = this.key.x2 - this.key.x1;
             var dy = this.key.y2 - this.key.y1;
-            this.balls[i].velX = dx/10;
-            this.balls[i].velY = dy/10;
+            this.balls[i].velX = dx / 10;
+            this.balls[i].velY = dy / 10;
         }
     }
 
-}
+};
+Billiard.prototype.drawPockets = function(ctx, width) {
+    var coeff = 1.5;
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = "rgb(0, 0, 0)";
+    ctx.fillStyle = 'rgba(0, 0, 0, 1)';
+    ctx.beginPath();
+    ctx.moveTo(tableX1 + coeff * radius, tableY1);
+    ctx.lineTo(tableX1, tableY1 + coeff * radius);
+    ctx.stroke();
 
+    ctx.arc(tableX1, tableY1, coeff + radius, 135 * Math.PI / 180, Math.PI + 135 * Math.PI / 180);
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.moveTo(tableX2 - coeff * radius, tableY2);
+    ctx.lineTo(tableX2, tableY2 - coeff * radius);
+    ctx.stroke();
+
+    ctx.arc(tableX2, tableY2, coeff + radius, 315 * Math.PI / 180, Math.PI + 315 * Math.PI / 180);
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.moveTo(tableX2 - coeff * radius, tableY1);
+    ctx.lineTo(tableX2, tableY1 + coeff * radius);
+    ctx.stroke();
+
+    ctx.arc(tableX2, tableY1, coeff + radius, 45 * Math.PI / 180, 225 * Math.PI / 180, true);
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.moveTo(tableX1 + coeff * radius, tableY2);
+    ctx.lineTo(tableX1, tableY2 - coeff * radius);
+    ctx.stroke();
+
+    ctx.arc(tableX1, tableY2, coeff + radius, 225 * Math.PI / 180, 45 * Math.PI / 180, true);
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.moveTo(width / 2 - (coeff + radius), tableY1);
+    ctx.lineTo(width / 2 + coeff + radius, tableY1);
+    ctx.stroke();
+
+    ctx.arc(width / 2, tableY1 - 5, coeff + radius, 0, Math.PI, true);
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.moveTo(width / 2 - (coeff + radius), tableY2);
+    ctx.lineTo(width / 2 + coeff + radius, tableY2);
+    ctx.stroke();
+
+    ctx.arc(width / 2, tableY2 + 5, coeff + radius, 0, Math.PI);
+    ctx.fill();
+
+};
 module.exports.Ball = Ball;
 module.exports.random = random;
 module.exports.Billiard = Billiard;

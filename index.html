@@ -10,11 +10,12 @@
 	<canvas></canvas>
 	
 	<script>
+
         var $ = require("./node_modules/jquery/dist/jquery.js");
         const renderer = require('./renderer.js');
         const Billiard = renderer.Billiard;
         const Ball = renderer.Ball;
-        const radius = 10;
+        const radius = 12;
 
         var canvas = document.querySelector('canvas');
         var ctx = canvas.getContext('2d');
@@ -44,6 +45,9 @@
            
             ctx.fillStyle = 'rgba(0, 130, 0, 0.90)';
             ctx.fillRect(tableX1, tableY1, tableWidth, tableHeight);
+
+            //drawing pockets
+            billiard.drawPockets(ctx, width);
             
             for (i = 0; i < billiard.balls.length; i++) {
                 billiard.balls[i].draw(ctx);
