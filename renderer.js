@@ -248,7 +248,7 @@ Billiard.prototype.strikeBall = function () {
 
 };
 Billiard.prototype.drawPockets = function(ctx, width) {
-    var coeff = 1.5;
+    var coeff = 1.7;
     ctx.lineWidth = 2;
     ctx.strokeStyle = "rgb(0, 0, 0)";
     ctx.fillStyle = 'rgba(0, 0, 0, 1)';

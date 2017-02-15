@@ -15,7 +15,7 @@
         const renderer = require('./renderer.js');
         const Billiard = renderer.Billiard;
         const Ball = renderer.Ball;
-        const radius = 12;
+        const radius = 15;
 
         var canvas = document.querySelector('canvas');
         var ctx = canvas.getContext('2d');
@@ -31,7 +31,7 @@
         var tableY1 = height * (1 / 6);
         var tableX2 = tableX1 + tableWidth;
         var tableY2 = tableY1 + tableHeight;
-        var border = 20;
+        var border = 25;
 
         var billiard = new Billiard(tableX1, tableY1, tableWidth, tableHeight, radius);
         billiard.setInitPosition();
