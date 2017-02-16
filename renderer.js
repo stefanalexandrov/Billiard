@@ -55,7 +55,17 @@ Ball.prototype.draw = function (ctx) {
     ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
     ctx.fill();
 };
-Ball.prototype.update = function(billiard) {
+Ball.prototype.update = function (billiard) {
+    var middlePocketDiff = Math.abs((billiard.tableX1 + billiard.width / 2) - this.x);
+    var middlePocketSensitivity = 5;
+    if ((this.y - this.radius) <= billiard.tableY1 - this.radius / 2 && (middlePocketDiff <= middlePocketSensitivity)) {
+        this.inPocket = true;
+        return;
+    }
+    if ((this.y + this.radius) >= billiard.tableY2 + this.radius / 2 && (middlePocketDiff <= middlePocketSensitivity)) {
+        this.inPocket = true;
+        return;
+    }
     if (this.inPocket)
         return;
     if (this.x < billiard.tableX1 + 1.2*this.radius && this.y < billiard.tableY1 + 1.2*this.radius) {
@@ -74,16 +84,17 @@ Ball.prototype.update = function(billiard) {
         this.inPocket = true;
         return;
     }
+    
     if ((this.x + this.radius) >= billiard.tableX2) {
         this.velX = -(this.velX);
     }
     if ((this.x - this.radius) <= billiard.tableX1) {
         this.velX = -(this.velX);
     }
-    if ((this.y + this.radius) >= billiard.tableY2) {
+    if ((this.y + this.radius) >= billiard.tableY2 && middlePocketDiff > middlePocketSensitivity) {
         this.velY = -(this.velY);
     }
-    if ((this.y - this.radius) <= billiard.tableY1) {
+    if ((this.y - this.radius) <= billiard.tableY1 && middlePocketDiff > middlePocketSensitivity) {
         this.velY = -(this.velY);
     }
     /*
@@ -247,11 +258,13 @@ Billiard.prototype.strikeBall = function () {
     }
 
 };
-Billiard.prototype.drawPockets = function(ctx, width) {
-    var coeff = 1.7;
+Billiard.prototype.drawPockets = function(ctx) {
+    var coeff = 1.8; // sizing of pockets
     ctx.lineWidth = 2;
     ctx.strokeStyle = "rgb(0, 0, 0)";
     ctx.fillStyle = 'rgba(0, 0, 0, 1)';
+	
+	// left top pocket
     ctx.beginPath();
     ctx.moveTo(tableX1 + coeff * radius, tableY1);
     ctx.lineTo(tableX1, tableY1 + coeff * radius);
@@ -259,7 +272,7 @@ Billiard.prototype.drawPockets = function(ctx, width) {
 
     ctx.arc(tableX1, tableY1, coeff + radius, 135 * Math.PI / 180, Math.PI + 135 * Math.PI / 180);
     ctx.fill();
-
+    // right bottom pocket
     ctx.beginPath();
     ctx.moveTo(tableX2 - coeff * radius, tableY2);
     ctx.lineTo(tableX2, tableY2 - coeff * radius);
@@ -267,7 +280,7 @@ Billiard.prototype.drawPockets = function(ctx, width) {
 
     ctx.arc(tableX2, tableY2, coeff + radius, 315 * Math.PI / 180, Math.PI + 315 * Math.PI / 180);
     ctx.fill();
-
+    // right top pocket
     ctx.beginPath();
     ctx.moveTo(tableX2 - coeff * radius, tableY1);
     ctx.lineTo(tableX2, tableY1 + coeff * radius);
@@ -275,7 +288,7 @@ Billiard.prototype.drawPockets = function(ctx, width) {
 
     ctx.arc(tableX2, tableY1, coeff + radius, 45 * Math.PI / 180, 225 * Math.PI / 180, true);
     ctx.fill();
-
+    // left bottom pocket
     ctx.beginPath();
     ctx.moveTo(tableX1 + coeff * radius, tableY2);
     ctx.lineTo(tableX1, tableY2 - coeff * radius);
@@ -283,21 +296,21 @@ Billiard.prototype.drawPockets = function(ctx, width) {
 
     ctx.arc(tableX1, tableY2, coeff + radius, 225 * Math.PI / 180, 45 * Math.PI / 180, true);
     ctx.fill();
-
+    // middle upper pocket
     ctx.beginPath();
-    ctx.moveTo(width / 2 - (coeff + radius), tableY1);
-    ctx.lineTo(width / 2 + coeff + radius, tableY1);
+    ctx.moveTo((this.tableX1 + this.width/2) - (coeff + radius), tableY1);
+    ctx.lineTo((this.tableX1 + this.width/2) + coeff + radius, tableY1);
     ctx.stroke();
 
-    ctx.arc(width / 2, tableY1 - 5, coeff + radius, 0, Math.PI, true);
+    ctx.arc((this.tableX1 + this.width / 2), tableY1 - 5, coeff + radius, 0, Math.PI, true);
     ctx.fill();
-
+    // middle bottom pocket
     ctx.beginPath();
-    ctx.moveTo(width / 2 - (coeff + radius), tableY2);
-    ctx.lineTo(width / 2 + coeff + radius, tableY2);
+    ctx.moveTo((this.tableX1 + this.width/2) - (coeff + radius), tableY2);
+    ctx.lineTo((this.tableX1 + this.width/2) + coeff + radius, tableY2);
     ctx.stroke();
 
-    ctx.arc(width / 2, tableY2 + 5, coeff + radius, 0, Math.PI);
+    ctx.arc((this.tableX1 + this.width / 2), tableY2 + 5, coeff + radius, 0, Math.PI);
     ctx.fill();
 
 };
