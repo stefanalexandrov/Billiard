@@ -51,7 +51,7 @@
             
             for (i = 0; i < billiard.balls.length; i++) {
                 billiard.balls[i].draw(ctx);
-                for (var j = 0; j < 5; j++) {
+                for (var j = 0; j < 10; j++) {
                     billiard.balls[i].update(billiard);
                     billiard.collisionDetect(billiard.balls[i]);
                 }
