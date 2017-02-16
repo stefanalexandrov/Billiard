@@ -57,7 +57,7 @@ Ball.prototype.draw = function (ctx) {
 };
 Ball.prototype.update = function (billiard) {
     var middlePocketDiff = Math.abs((billiard.tableX1 + billiard.width / 2) - this.x);
-    var middlePocketSensitivity = 5;
+    var middlePocketSensitivity = 10;
     if ((this.y - this.radius) <= billiard.tableY1 - this.radius / 2 && (middlePocketDiff <= middlePocketSensitivity)) {
         this.inPocket = true;
         return;
