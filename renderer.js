@@ -60,6 +60,7 @@ Ball.prototype.update = function (billiard) {
         return;
     var middlePocketDiff = Math.abs((billiard.tableX1 + billiard.width / 2) - this.x);
     var middlePocketSensitivity = 10;
+    var cornerPocketsSensitivity = 1.5;
     var Y1diff = Math.abs(billiard.tableY1 - this.y);
     var Y2diff = Math.abs(billiard.tableY2 - this.y);
     var X1diff = Math.abs(billiard.tableX1 - this.x);
@@ -72,19 +73,19 @@ Ball.prototype.update = function (billiard) {
         this.inPocket = true;
         return;
     }
-    if (X1diff <= 1.2 * this.radius && Y1diff <= 1.2 * this.radius) {
+    if (X1diff <= cornerPocketsSensitivity * this.radius && Y1diff <= cornerPocketsSensitivity * this.radius) {
         this.inPocket = true;
         return;
     }
-    if (X1diff <= 1.2 * this.radius && Y2diff <= 1.2 * this.radius) {
+    if (X1diff <= cornerPocketsSensitivity * this.radius && Y2diff <= cornerPocketsSensitivity * this.radius) {
         this.inPocket = true;
         return;
     }
-    if (X2diff <= 1.2 * this.radius && Y2diff <= 1.2 * this.radius) {
+    if (X2diff <= cornerPocketsSensitivity * this.radius && Y2diff <= cornerPocketsSensitivity * this.radius) {
         this.inPocket = true;
         return;
     }
-    if (X2diff <= 1.2 * this.radius && Y1diff <= 1.2 * this.radius) {
+    if (X2diff <= cornerPocketsSensitivity * this.radius && Y1diff <= cornerPocketsSensitivity * this.radius) {
         this.inPocket = true;
         return;
     }
@@ -133,6 +134,10 @@ Ball.prototype.update = function (billiard) {
 };
 
 function collisionPhysics(ball1, ball2) { // models ideal elastic collision in 2D
+    if (ball1.processed)
+        return;
+    if (ball2.processed)
+        return;
     var m1 = Math.pow(ball1.radius + 1, 3);
     var m2 = Math.pow(ball2.radius + 1, 3);
     var V1 = Math.sqrt(ball1.velX * ball1.velX + ball1.velY * ball1.velY);
