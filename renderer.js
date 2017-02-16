@@ -59,7 +59,7 @@ Ball.prototype.update = function (billiard) {
     if (this.inPocket)
         return;
     var middlePocketDiff = Math.abs((billiard.tableX1 + billiard.width / 2) - this.x);
-    var middlePocketSensitivity = 5;
+    var middlePocketSensitivity = 10;
     var Y1diff = Math.abs(billiard.tableY1 - this.y);
     var Y2diff = Math.abs(billiard.tableY2 - this.y);
     var X1diff = Math.abs(billiard.tableX1 - this.x);
