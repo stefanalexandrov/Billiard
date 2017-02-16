@@ -313,7 +313,7 @@ Billiard.prototype.drawPockets = function(ctx) {
     ctx.lineTo((this.tableX1 + this.width/2) + coeff + radius, tableY1);
     ctx.stroke();
 
-    ctx.arc((this.tableX1 + this.width / 2), tableY1 - 5, coeff + radius, 0, Math.PI, true);
+    ctx.arc((this.tableX1 + this.width / 2), tableY1 - 10, coeff + radius, 0, Math.PI, true);
     ctx.fill();
     // middle bottom pocket
     ctx.beginPath();
@@ -321,7 +321,7 @@ Billiard.prototype.drawPockets = function(ctx) {
     ctx.lineTo((this.tableX1 + this.width/2) + coeff + radius, tableY2);
     ctx.stroke();
 
-    ctx.arc((this.tableX1 + this.width / 2), tableY2 + 5, coeff + radius, 0, Math.PI);
+    ctx.arc((this.tableX1 + this.width / 2), tableY2 + 10, coeff + radius, 0, Math.PI);
     ctx.fill();
 
 };
