@@ -134,9 +134,9 @@ Ball.prototype.update = function (billiard) {
 };
 
 function collisionPhysics(ball1, ball2) { // models ideal elastic collision in 2D
-    if (ball1.processed)
+    if (ball1.inPocket)
         return;
-    if (ball2.processed)
+    if (ball2.inPocket)
         return;
     var m1 = Math.pow(ball1.radius + 1, 3);
     var m2 = Math.pow(ball2.radius + 1, 3);
