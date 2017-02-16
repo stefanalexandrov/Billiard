@@ -37,19 +37,16 @@
         billiard.setInitPosition();
 
         
-
-        ctx.fillStyle = 'rgba(0, 0, 0, 1)';
-        ctx.fillRect(0, 0, width, height);
-
-        ctx.strokeStyle = 'rgb(50, 70, 255)';
-        ctx.font = '48px serif';
-        ctx.textBaseline = 'hanging';
-        ctx.strokeText('Billiard 1.0', 10, 10);
-        
         function loop() { // animation loop
-            
+            ctx.fillStyle = 'rgba(0, 0, 0, 1)';
+            ctx.fillRect(0, 0, width, height);
 
-            ctx.fillStyle = 'rgba(150, 90, 70, 0.90)';
+            ctx.strokeStyle = 'rgb(50, 70, 255)';
+            ctx.font = '48px serif';
+            ctx.textBaseline = 'hanging';
+            ctx.strokeText('Billiard 1.0', 10, 10);
+
+            ctx.fillStyle = 'rgba(80, 50, 40, 0.90)';
             ctx.fillRect(tableX1 - border, tableY1 - border, tableWidth + 2*border, tableHeight + 2*border);
            
             ctx.fillStyle = 'rgba(0, 130, 0, 0.90)';
