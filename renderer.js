@@ -56,6 +56,8 @@ Ball.prototype.draw = function (ctx) {
     ctx.fill();
 };
 Ball.prototype.update = function (billiard) {
+    if (this.inPocket)
+        return;
     var middlePocketDiff = Math.abs((billiard.tableX1 + billiard.width / 2) - this.x);
     var middlePocketSensitivity = 10;
     if ((this.y - this.radius) <= billiard.tableY1 - this.radius / 2 && (middlePocketDiff <= middlePocketSensitivity)) {
@@ -212,6 +214,8 @@ Billiard.prototype.setInitPosition = function () {
 };
 Billiard.prototype.collisionDetect = function (ball) {
     if (ball.processed)
+        return;
+    if (ball.inPocket)
         return;
     for (var j = 0; j < this.balls.length; j++) {
         if (!this.balls[j].processed &&
