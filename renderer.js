@@ -59,7 +59,11 @@ Ball.prototype.update = function (billiard) {
     if (this.inPocket)
         return;
     var middlePocketDiff = Math.abs((billiard.tableX1 + billiard.width / 2) - this.x);
-    var middlePocketSensitivity = 10;
+    var middlePocketSensitivity = 5;
+    var Y1diff = Math.abs(billiard.tableY1 - this.y);
+    var Y2diff = Math.abs(billiard.tableY2 - this.y);
+    var X1diff = Math.abs(billiard.tableX1 - this.x);
+    var X2diff = Math.abs(billiard.tableX2 - this.x);
     if ((this.y - this.radius) <= billiard.tableY1 - this.radius / 2 && (middlePocketDiff <= middlePocketSensitivity)) {
         this.inPocket = true;
         return;
@@ -68,21 +72,19 @@ Ball.prototype.update = function (billiard) {
         this.inPocket = true;
         return;
     }
-    if (this.inPocket)
-        return;
-    if (this.x < billiard.tableX1 + 1.2*this.radius && this.y < billiard.tableY1 + 1.2*this.radius) {
+    if (X1diff <= 1.2 * this.radius && Y1diff <= 1.2 * this.radius) {
         this.inPocket = true;
         return;
     }
-    if (this.x < billiard.tableX1 + 1.2 * this.radius && this.y > billiard.tableY2 - 1.2 * this.radius) {
+    if (X1diff <= 1.2 * this.radius && Y2diff <= 1.2 * this.radius) {
         this.inPocket = true;
         return;
     }
-    if (this.x > billiard.tableX2 - 1.2 * this.radius && this.y > billiard.tableY2 - 1.2 * this.radius) {
+    if (X2diff <= 1.2 * this.radius && Y2diff <= 1.2 * this.radius) {
         this.inPocket = true;
         return;
     }
-    if (this.x > billiard.tableX2 - 1.2 * this.radius && this.y < billiard.tableY1 + 1.2 * this.radius) {
+    if (X2diff <= 1.2 * this.radius && Y1diff <= 1.2 * this.radius) {
         this.inPocket = true;
         return;
     }
