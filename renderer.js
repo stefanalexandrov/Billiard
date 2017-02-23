@@ -325,6 +325,11 @@ Billiard.prototype.drawPockets = function(ctx) {
     ctx.fill();
 
 };
+// for testing just
+function sum(a, b) {
+    return a + b;
+}
+module.exports = sum;
 module.exports.Ball = Ball;
 module.exports.random = random;
 module.exports.Billiard = Billiard;
